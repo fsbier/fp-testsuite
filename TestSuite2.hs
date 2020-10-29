@@ -40,8 +40,8 @@ spec =
         liefere_woerter_in " Complex\tBounds will,\nundoubtedly, bring \n Desaster.\n" @?=
           ["Complex","Bounds","will,","undoubtedly,","bring","Desaster."],
 
-      testCase "Hammingabstand 0.0" $ hM [] @?= 0,
-      testCase "Hammingabstand 0.1" $ hM ["test"] @?= 0,
+      testCase "Hammingabstand 0.0" $ hM [] @?= -1,
+      testCase "Hammingabstand 0.1" $ hM ["test"] @?= -1,
       testCase "Hammingabstand 0.2" $ hM ["test Zero", "test Zero", "test Zero"] @?= 0,
       testCase "Hammingabstand 1" $ hM ["Fahrrad","Autobus"] @?= 7,
       testCase "Hammingabstand 2" $ hM ["1001","1111","1100"] @?= 2,

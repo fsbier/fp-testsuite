@@ -41,11 +41,14 @@ spec =
           ["Complex","Bounds","will,","undoubtedly,","bring","Desaster."],
 
       testCase "Hammingabstand 0.0" $ hM [] @?= -1,
-      testCase "Hammingabstand 0.1" $ hM ["test"] @?= -1,
-      testCase "Hammingabstand 0.2" $ hM ["test Zero", "test Zero", "test Zero"] @?= 0,
+      testCase "Hammingabstand 0.1" $ hM ["", ""] @?= -1,
+      testCase "Hammingabstand 0.2" $ hM ["foo"] @?= -1,
+      testCase "Hammingabstand 0.3" $ hM ["foo", "foo"] @?= -1,
+      testCase "Hammingabstand 0.4" $ hM ["ab", "bb", "ba"] @?= 1,
+      testCase "Hammingabstand 0.5" $ hM ["foo", "foo", "bar"] @?= 3,
       testCase "Hammingabstand 1" $ hM ["Fahrrad","Autobus"] @?= 7,
       testCase "Hammingabstand 2" $ hM ["1001","1111","1100"] @?= 2,
       testCase "Hammingabstand 3" $ hM ["Haskell","Fortran","Miranda","Clojure"] @?= 6,
       testCase "Hammingabstand 4" $ hM ["Haskell","Java","Prolog"] @?= -1,
-      testCase "Hammingabstand 5" $ hM ["test 01", "test 11", "test XX"] @?= 1
+      testCase "Hammingabstand 5" $ hM ["01", "11", "XX"] @?= 1
     ]

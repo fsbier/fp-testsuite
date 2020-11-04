@@ -116,6 +116,8 @@ spec =
 
       testCase "extrahiere nothing" $ assertError "Extraktion nicht moeglich" (extrahiere Nothing :: [Int]),
       testCase "extrahiere leer" $ extrahiere (Just [] :: Maybe [Int]) @?= [],
+      testCase "extrahiere leer" $ extrahiere (Just [5..2] :: Maybe [Int]) @?= [],
+      testCase "extrahiere leer" $ extrahiere (Just [5,4..2] :: Maybe [Int]) @?= [5,4,3,2],
       testCase "extrahiere id" $ extrahiere (Just [2..2] :: Maybe [Int]) @?= [2],
       testCase "extrahiere 1" $ extrahiere (Just [2..5] :: Maybe [Int]) @?= [2,3,4,5],
 
@@ -132,6 +134,8 @@ spec =
       testCase "lueckenlos 3" $ ist_lueckenlos ([2..5]::[Int]) @?= True,
       testCase "lueckenlos 4" $ ist_lueckenlos ([2,5..21]::[Int]) @?= False,
       testCase "lueckenlos 5" $ ist_lueckenlos ([5,4..2]::[Int]) @?= True,
+      testCase "lueckenlos 6" $ ist_lueckenlos ([5,3,4,1,2]::[Int]) @?= True,
+      testCase "lueckenlos 7" $ ist_lueckenlos ([5,3,4,5,1,3,5,2]::[Int]) @?= True,
 
       testCase "laL Element nothing" $ ist_laL_Element (3::Int) Nothing @?= False,
       testCase "laL Element leer" $ ist_laL_Element (3::Int) (Just []) @?= False,
@@ -141,5 +145,6 @@ spec =
       testCase "laL Element 2" $ ist_laL_Element (2::Int) (Just [2..5]) @?= True,
       testCase "laL Element 3" $ ist_laL_Element (3::Int) (Just [2,3,5]) @?= False,
       testCase "laL Element 4" $ ist_laL_Element (3::Int) (Just [5,4..2]) @?= False,
-      testCase "laL Element 5" $ ist_laL_Element (8::Int) (Just [2,5..21]) @?= False
+      testCase "laL Element 5" $ ist_laL_Element (8::Int) (Just [2,5..21]) @?= False,
+      testCase "laL Element 6" $ ist_laL_Element (5::Int) (Just [1,2,3,3,4,5,5,5]) @?= True
     ]

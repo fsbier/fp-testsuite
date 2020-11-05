@@ -24,7 +24,7 @@ spec =
     [
       testCase "show Ungültig" $ show Ungueltig @?= "Kein Intervall",
       testCase "show Leer" $ show Leer @?= "<>",
-      testCase "show <1,1>" $ show (IV (1,1)) @?= "1",
+      testCase "show <1,1>" $ show (IV (1,1)) @?= "<1,1>",
       testCase "show <5,2>" $ show (IV (5,2)) @?= "<>",
       testCase "show <2,5>" $ show (IV (2,5)) @?= "<2,5>",
 

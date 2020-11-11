@@ -259,7 +259,7 @@ spec =
         testCase "Eq Test 8" $ (K (B "b") "a" (K (B "d") "c" (B "e"))) == (K (B "b") "a" (B "c")) @?= False,
 
         -- Aufgabe 4 - Order
-        testCase "ord 1" $ (K (K (B "") "" (B "")) "abc" (B "")) > (K (B "") "ab" (B "")) @?= True,
+        testCase "ord 1" $ (K (K (B "") "a" (B "")) "abc" (B "a")) > (K (B "") "ab" (B "")) @?= True,
         testCase "ord 2" $ (B "") > (B "") @?= False,
         testCase "ord 3" $ (B "") >= (B "") @?= True,
         testCase "ord 4" $ (B "") < (B "") @?= False,
@@ -280,6 +280,7 @@ spec =
         testCase "ord 19" $ (K (K (B "") "" (B "")) "" (B "")) <= (K (B "a") "a" (K (B "a") "a" (B "a"))) @?= False,
         testCase "ord 20" $ (K (K (B "a") "a" (B "a")) "a" (B "a")) > (K (B "") "" (K (B "") "a" (B ""))) @?= False,
         testCase "ord 21" $ (K (K (B "a") "a" (B "a")) "a" (B "a")) >= (K (B "") "" (K (B "") "a" (B ""))) @?= False,
+        testCase "ord 22" $ (K (K (B "") "" (B "")) "abc" (B "")) > (K (B "") "ab" (B "")) @?= False,
         
         --Aufgabe 5
         testCase "intervall Test 1" $ show (B [IV (2, 5)]) @?= "<[<2,5>]>",

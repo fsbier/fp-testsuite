@@ -244,11 +244,25 @@ spec =
 
         --Aufgabe 4
         testCase "show Test 1" $ show (B ([] :: [Int])) @?= "<[]>",
-        testCase "show Test 2" $ show (B [1,2,3]) @?= "<[1,2,3]>",
-        testCase "show Test 3" $ show (B [True,False,True]) @?= "<[True,False,True]>",
-        testCase "show Test 4" $ show (B ["Functional","Programming","is","Fun"]) @?= "<[\"Functional\",\"Programming\",\"is\",\"Fun\"]>",
-        testCase "show Test 5" $ show (K (B []) [1,2,3] (B [4,5,6])) @?= "<Wurzel [1,2,3] <[]> <[4,5,6]>>",
-        testCase "show Test 6" $ show (K (K (B []) [1,2,3] (B [4,5,6])) [] (B [7,8,9])) @?= "<Wurzel [] <Wurzel [1,2,3] <[]> <[4,5,6]>> <[7,8,9]>>"
+        testCase "show Test 2" $ show (B [1, 2, 3]) @?= "<[1,2,3]>",
+        testCase "show Test 3" $ show (B [True, False, True]) @?= "<[True,False,True]>",
+        testCase "show Test 4" $ show (B ["Functional", "Programming", "is", "Fun"]) @?= "<[\"Functional\",\"Programming\",\"is\",\"Fun\"]>",
+        testCase "show Test 5" $ show (K (B []) [1, 2, 3] (B [4, 5, 6])) @?= "<Wurzel [1,2,3] <[]> <[4,5,6]>>",
+        testCase "show Test 6" $ show (K (K (B []) [1, 2, 3] (B [4, 5, 6])) [] (B [7, 8, 9])) @?= "<Wurzel [] <Wurzel [1,2,3] <[]> <[4,5,6]>> <[7,8,9]>>",
+        testCase "Eq Test 1" $ (B "bier") == (B "bier") @?= True,
+        testCase "Eq Test 2" $ (B "Knopers") == (B []) @?= False,
+        testCase "Eq Test 3" $ (K (B "bier") "bier" (B "bier")) == (B "bier") @?= False,
+        testCase "Eq Test 4" $ (B "bier") == (K (B "bier") "bier" (B "bier")) @?= False,
+        testCase "Eq Test 5" $ (K (B "b") "a" (B "c")) == (K (B "b") "a" (B "c")) @?= True,
+        testCase "Eq Test 6" $ (K (B "b") "x" (B "c")) == (K (B "b") "a" (B "c")) @?= False,
+        testCase "Eq Test 7" $ (K (B "x") "a" (B "c")) == (K (B "b") "a" (B "c")) @?= False,
+        testCase "Eq Test 8" $ (K (B "b") "a" (K (B "d") "c" (B "e"))) == (K (B "b") "a" (B "c")) @?= False,
         
-        
+        --Aufgabe 5
+        testCase "intervall Test 1" $ show (B [IV (2, 5)]) @?= "<[<2,5>]>",
+        testCase "intervall Test 2" $ show (B [IV (5, 2)]) @?= "<[<>]>",
+        testCase "intervall Test 3" $ show (B [Leer]) @?= "<[<>]>",
+        testCase "intervall Test 4" $ show (B [IV (2, 5), IV (5, 2), Leer, Ungueltig]) @?= "<[<2,5>,<>,<>,Kein Intervall]>",
+        testCase "intervall Test 5" $ show (K (B [IV (2, 2)]) [IV (2, 3)] (B [Leer])) @?= "<Wurzel [<2,3>] <[<2,2>]> <[<>]>>"
+
     ]

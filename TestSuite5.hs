@@ -3,6 +3,16 @@ module TestSuite5 where
 import Test.Tasty
 import Test.Tasty.HUnit
 
+
+-- gueltiger Wahlvorschlag
+gwv = [WW "John" "Smith" ABC,
+       WW "Judy" "Hall" DEF,
+       WW "John" "Doug" MNO]
+-- gemischte Wahl
+gw = [[1,2,3,4],[2,1,3],[3,4,1],[],[5,1],[1,2,3],[2,3,1],[2,2,1]]
+wahl1 = [[2,1,3],[3,4,1],[5,1],[1,2,3],[2,3,1]]
+wahl3 = [[2,1,3],[3,4,1],[2,1],[1,2,3],[3,2,1]]
+
 spec :: TestTree
 spec =
   testGroup
@@ -52,5 +62,6 @@ spec =
       testCase "wa 5" $  wahlausgang gwv [[1,1,3],[2,2],[6,1,3],[]] @?= Kein_Wahlsieger_Wahlwiederholung,
       testCase "wa 6" $  wahlausgang gwv [[1,1,3],[2,2],[6,1,3]] @?= Keine_gueltigen_Stimmen,
       testCase "wa 7" $  wahlausgang [] [[1,2],[2,1],[2],[1]] @?= Ungueltiger_Wahlvorschlag,
-      testCase "wa 8" $  wahlausgang gwv [[1,2,4],[2,1],[4,1],[],[5,1],[1,2],[2,1],[1,2]] @?= Kein_Wahlsieger_Wahlwiederholung
+      testCase "wa 8" $  wahlausgang gwv [[1,2,4],[2,1],[4,1],[],[5,1],[1,2],[2,1],[1,2]] @?= Kein_Wahlsieger_Wahlwiederholung,
+      testCase "wa 9" $  wahlausgang gwv [[2,1,3],[3,4,1],[2,1],[3,1,2],[3,2,1]] @?= Kein_Wahlsieger_Wahlwiederholung
     ]

@@ -2,6 +2,7 @@ module TestSuite5 where
 
 import Test.Tasty
 import Test.Tasty.HUnit
+import Angabe5
 
 
 -- gueltiger Wahlvorschlag

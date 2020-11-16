@@ -32,7 +32,7 @@ spec =
       testCase "igS 6" $  ist_gueltiger_Stimmzettel gwv [1,2,3,4] @?= False,
       testCase "igS 7" $  ist_gueltiger_Stimmzettel gwv [1,2,2] @?= False,
       -- A3
-      testCase "tS 1" $  trenne_Stimmzettel [] [[1,2,3]] @?= ([],[]), -- Laut Angabe unklar ob error oder leere Liste?
+      testCase "tS 1" $  trenne_Stimmzettel [] [[1,2,3]] @?= ([],[1,2,3]), -- Laut Angabe unklar ob error oder leere Liste?
       testCase "tS 2" $  trenne_Stimmzettel gwv [[2,1,3],[3,4,1],[5,1],[1,2,3],[2,3,1]] @?= ([[2,1,3],[1,2,3],[2,3,1]],[[3,4,1],[5,1]]),
       testCase "tS 3" $  trenne_Stimmzettel gwv [[1,2,3,4],[2,1,3],[3,4,1],[],[5,1],[1,2,3],[2,3,1],[2,2,1]] @?= ([[2,1,3],[],[1,2,3],[2,3,1]],[[1,2,3,4],[3,4,1],[5,1],[2,2,1]]),
       -- A4

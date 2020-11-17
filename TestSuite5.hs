@@ -93,7 +93,7 @@ spec =
       testCase "wan 10" $  wahlanalyse gwv2 [[2,1,5,3], [2,4,1,3], [2,1,3,4], [3,2,1,5], [4,1,3], [4,5,1,2], [4,1,5], [5,4,1,3], [5,2,4,1], [4,6,2,1], [4,6,3,2]] @?= GWV [ABC], -- 1, 3, 5, 4 .. 2 wins
       testCase "wan 11" $  wahlanalyse gwv2 [[5,1,3], [5,3,2], [5,4,1], [3,5,4], [2,1], [2,4], [4,2], [4,3]] @?= GWV [DEF, MNO],  -- 1, 3, (2, 4) .. 5 wins
       testCase "wan 12" $  wahlanalyse gwv2 [[5,2,4], [5,4,1], [5,3,2], [3,5,1], [2,5], [2,3], [4,3], [4,1], [5,4]] @?= GWV [DEF, MNO],
-      testCase "wan 13" $  wahlanalyse gwv2 [[1,2],[1,4],[1,2],[5,3],[4,3],[4,2],[3,1],[3,2],[2,1],[2,1],[2,3],[1,5]] @?= GWV [ABC, DEF, MNO],  -- 5,4,(3,2,1) ... keiner gewinnt
+      testCase "wan 13" $  wahlanalyse gwv2 [[1,2],[1,4],[1,2],[5,3],[4,3],[4,2],[3,1],[3,2],[2,1],[2,1],[2,3],[1,5]] @?= Analyse_nicht_moeglich,  -- 5,4,(3,2,1) ... keiner gewinnt
       testCase "wan 14" $  wahlanalyse gwv3 wahl1 @?= Keine,
       testCase "wan 15" $  wahlanalyse gwv3 wahl3 @?= Keine
     ]

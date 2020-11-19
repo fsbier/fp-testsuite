@@ -81,7 +81,7 @@ spec =
       testCase "wa 12" $  wahlausgang gwv2 [[5,2,4], [5,4,1], [5,3,2], [3,5,1], [2,5], [2,3], [4,3], [4,1], [5,4]] @?= Gewaehlt_ist (gwv2!!4),
       testCase "wa 13" $  wahlausgang gwv2 [[1,2],[1,4],[1,2],[5,3],[4,3],[4,2],[3,1],[3,2],[2,1],[2,1],[2,3],[1,5]] @?= Kein_Wahlsieger_Wahlwiederholung,
       -- A8
-      testCase "wan 1"  $  wahlanalyse gwv wahl1 @?= GWV [ABC, MNO],
+      testCase "wan 1"  $  wahlanalyse gwv wahl1 @?= GWV [MNO],
       testCase "wan 2"  $  wahlanalyse gwv wahl3 @?= GWV [ABC, MNO],
       testCase "wan 3"  $  wahlanalyse gwv [[1,2],[2,1],[2],[1]] @?= GWV [MNO],
       testCase "wan 4"  $  wahlanalyse gwv [[],[],[],[]] @?= GWV [ABC, DEF, MNO],

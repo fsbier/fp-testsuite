@@ -15,16 +15,16 @@ unsortedList :: [Integer]
 unsortedList = [31, 29, 82, 14, 77, 19, 2, 41, 96, 40, 43, 93, 60, 62, 85, 86, 11, 40, 60, 98, 87, 21, 4, 25, 80, 35, 67, 23, 48, 62, 85, 69, 89, 26, 16, 67, 48, 88, 82, 34, 79, 54, 59, 67, 44, 65, 26, 36, 60, 44, 68, 65, 65, 85, 37, 1, 86, 49, 13, 85, 61, 56, 96, 40, 64, 48, 13, 21, 53, 76, 83, 35, 82, 90, 65, 15, 47, 57, 58, 42, 81, 59, 33, 52, 74, 30, 69, 30, 38, 48, 50, 77, 97, 22, 53, 2, 88, 79, 86, 67]
 
 datenbank1 :: Datenbank
-datenbank1 = [
-  P 1 "Elsie" 58 F 5784 (Just Motorola),
-  P 2 "Jay" 26 M 224 (Just Samsung),
-  P 3 "Niamh" 37 D 635 (Just Huawai),
-  P 4 "Cora" 22 F 742 (Just Samsung),
-  P 5 "Kimberley" 7 M 3587 Nothing,
-  P 6 "Esther" 98 M 7052 (Just LG),
-  P 7 "Gemma" 78 M 6578 (Just Apple),
-  P 8 "Demi" 55 M 2790 (Just Huawai),
-  P 9 "Iqra" 54 M 6510 (Just Apple)
+datenbank1 =
+  [ P 1 "Elsie" 58 F 5784 (Just Motorola),
+    P 2 "Jay" 26 M 224 (Just Samsung),
+    P 3 "Niamh" 37 D 635 (Just Huawai),
+    P 4 "Cora" 22 F 742 (Just Samsung),
+    P 5 "Kimberley" 7 M 3587 Nothing,
+    P 6 "Esther" 98 M 7052 (Just LG),
+    P 7 "Gemma" 78 M 6578 (Just Apple),
+    P 8 "Demi" 55 M 2790 (Just Huawai),
+    P 9 "Iqra" 54 M 6510 (Just Apple)
   ]
 
 spec :: TestTree
@@ -43,6 +43,8 @@ spec =
       ordTreeTests,
       auf_lst_tests,
       ab_lst_tests,
+      auf_fun_tests,
+      ab_fun_tests,
       database_test
     ]
 
@@ -208,7 +210,7 @@ ordTreeTests =
         P.compare (K (B []) [1, 2] (B [])) (B [1]) @?= P.GT,
       testCase "Test 3" $ do
         P.compare (K (B [1]) [] (B [2])) (K (B [1]) [] (B [2])) @?= P.EQ,
-    -- advanced testcases:
+      -- advanced testcases:
       testCase "ord 1" $ (K (K (B "") "a" (B "")) "abc" (B "a")) > (K (B "") "ab" (B "")) @?= True,
       testCase "ord 2" $ (B "") > (B "") @?= False,
       testCase "ord 3" $ (B "") >= (B "") @?= True,
@@ -275,35 +277,44 @@ ab_lst_tests =
 
 auf_fun_tests :: TestTree
 auf_fun_tests =
-  testGroup "A.10" [
-    testCase "A10 01" $ auf_fun ([] :: [Int -> Int]) <*> pure 0 @?= ([]::[Int]),
-    testCase "A10 02" $ auf_fun ((+) <$> ([0..3]::[Int])) <*> pure 0 @?= [0,1,2,3],
-    testCase "A10 01" $ auf_fun ((\x y -> x*x+y-5) <$> ([-2..3]::[Int])) <*> pure 0 @?= [-5,-4,-4,-1,-1,4]
-  ]
+  testGroup
+    "A.10"
+    [ testCase "A10 01" $ auf_fun ([] :: [Int -> Int]) <*> pure 0 @?= ([] :: [Int]),
+      testCase "A10 02" $ auf_fun ((+) <$> ([0 .. 3] :: [Int])) <*> pure 0 @?= [0, 1, 2, 3],
+      testCase "A10 03" $ auf_fun ((\x y -> x * x + y -5) <$> ([-2 .. 3] :: [Int])) <*> pure 0 @?= [-5, -4, -4, -1, -1, 4],
+      testCase "A10 04" $ auf_fun [abs . ((-2) +), (`div` 1), const 1] <*> pure 0 @?= [0, 1, 2]
+    ]
 
-
+ab_fun_tests :: TestTree
+ab_fun_tests =
+  testGroup
+    "A.10"
+    [ testCase "A10 11" $ ab_fun ([] :: [Int -> Int]) <*> pure 0 @?= ([] :: [Int]),
+      testCase "A10 12" $ ab_fun ((+) <$> ([0 .. 3] :: [Int])) <*> pure 0 @?= [3,2,1,0],
+      testCase "A10 13" $ ab_fun ((\x y -> x * x + y -5) <$> ([-2 .. 3] :: [Int])) <*> pure 0 @?= [4,-1,-1,-4,-4,-5],
+      testCase "A10 14" $ ab_fun [abs . ((-2) +), (`div` 1), const 1] <*> pure 0 @?= [2, 1, 0]
+    ]
 
 database_test :: TestTree
 database_test =
   testGroup
     "A.13 Datenbank Personen"
-    [
-      testCase "A13 01" $ normalsicht datenbank1 @?=
-        [P 4 "Cora" 22 F 742 (Just Samsung),P 8 "Demi" 55 M 2790 (Just Huawai),P 1 "Elsie" 58 F 5784 (Just Motorola),P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 3 "Niamh" 37 D 635 (Just Huawai)],
-
-      testCase "A13 02" $ anlageberatungssicht datenbank1 @?=
-        [P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 1 "Elsie" 58 F 5784 (Just Motorola),P 5 "Kimberley" 7 M 3587 Nothing,P 8 "Demi" 55 M 2790 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 3 "Niamh" 37 D 635 (Just Huawai),P 2 "Jay" 26 M 224 (Just Samsung)],
-
-      testCase "A13 03" $ personalabteilungssicht datenbank1 @?=
-        [P 3 "Niamh" 37 D 635 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 1 "Elsie" 58 F 5784 (Just Motorola),P 5 "Kimberley" 7 M 3587 Nothing,P 2 "Jay" 26 M 224 (Just Samsung),P 9 "Iqra" 54 M 6510 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 7 "Gemma" 78 M 6578 (Just Apple),P 6 "Esther" 98 M 7052 (Just LG)],
-
-      testCase "A13 04" $ sozialforschungssicht datenbank1 @?=
-        [P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 3 "Niamh" 37 D 635 (Just Huawai),P 6 "Esther" 98 M 7052 (Just LG),P 1 "Elsie" 58 F 5784 (Just Motorola),P 4 "Cora" 22 F 742 (Just Samsung),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing],
-
-      testCase "A13 05" $ integritaetssicht datenbank1 @?=
-        [P 1 "Elsie" 58 F 5784 (Just Motorola),P 2 "Jay" 26 M 224 (Just Samsung),P 3 "Niamh" 37 D 635 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 9 "Iqra" 54 M 6510 (Just Apple)],
-
-      testCase "A13 06" $ map (head.getName) (auch_im_chaos_ist_ordnung_sicht datenbank1) @?= "CDEEGIJKN"
+    [ testCase "A13 01" $
+        normalsicht datenbank1
+          @?= [P 4 "Cora" 22 F 742 (Just Samsung), P 8 "Demi" 55 M 2790 (Just Huawai), P 1 "Elsie" 58 F 5784 (Just Motorola), P 6 "Esther" 98 M 7052 (Just LG), P 7 "Gemma" 78 M 6578 (Just Apple), P 9 "Iqra" 54 M 6510 (Just Apple), P 2 "Jay" 26 M 224 (Just Samsung), P 5 "Kimberley" 7 M 3587 Nothing, P 3 "Niamh" 37 D 635 (Just Huawai)],
+      testCase "A13 02" $
+        anlageberatungssicht datenbank1
+          @?= [P 6 "Esther" 98 M 7052 (Just LG), P 7 "Gemma" 78 M 6578 (Just Apple), P 9 "Iqra" 54 M 6510 (Just Apple), P 1 "Elsie" 58 F 5784 (Just Motorola), P 5 "Kimberley" 7 M 3587 Nothing, P 8 "Demi" 55 M 2790 (Just Huawai), P 4 "Cora" 22 F 742 (Just Samsung), P 3 "Niamh" 37 D 635 (Just Huawai), P 2 "Jay" 26 M 224 (Just Samsung)],
+      testCase "A13 03" $
+        personalabteilungssicht datenbank1
+          @?= [P 3 "Niamh" 37 D 635 (Just Huawai), P 4 "Cora" 22 F 742 (Just Samsung), P 1 "Elsie" 58 F 5784 (Just Motorola), P 5 "Kimberley" 7 M 3587 Nothing, P 2 "Jay" 26 M 224 (Just Samsung), P 9 "Iqra" 54 M 6510 (Just Apple), P 8 "Demi" 55 M 2790 (Just Huawai), P 7 "Gemma" 78 M 6578 (Just Apple), P 6 "Esther" 98 M 7052 (Just LG)],
+      testCase "A13 04" $
+        sozialforschungssicht datenbank1
+          @?= [P 7 "Gemma" 78 M 6578 (Just Apple), P 9 "Iqra" 54 M 6510 (Just Apple), P 8 "Demi" 55 M 2790 (Just Huawai), P 3 "Niamh" 37 D 635 (Just Huawai), P 6 "Esther" 98 M 7052 (Just LG), P 1 "Elsie" 58 F 5784 (Just Motorola), P 4 "Cora" 22 F 742 (Just Samsung), P 2 "Jay" 26 M 224 (Just Samsung), P 5 "Kimberley" 7 M 3587 Nothing],
+      testCase "A13 05" $
+        integritaetssicht datenbank1
+          @?= [P 1 "Elsie" 58 F 5784 (Just Motorola), P 2 "Jay" 26 M 224 (Just Samsung), P 3 "Niamh" 37 D 635 (Just Huawai), P 4 "Cora" 22 F 742 (Just Samsung), P 5 "Kimberley" 7 M 3587 Nothing, P 6 "Esther" 98 M 7052 (Just LG), P 7 "Gemma" 78 M 6578 (Just Apple), P 8 "Demi" 55 M 2790 (Just Huawai), P 9 "Iqra" 54 M 6510 (Just Apple)],
+      testCase "A13 06" $ map (head . getName) (auch_im_chaos_ist_ordnung_sicht datenbank1) @?= "CDEEGIJKN"
     ]
 
 {-

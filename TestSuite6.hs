@@ -273,6 +273,15 @@ ab_lst_tests =
       testCase "A8 08" $ ab_lst [[1 .. 5], [1], [1 .. 3], [1 .. 4], [1, 2]] @?= [[1 .. 5], [1 .. 4], [1 .. 3], [1, 2], [1]]
     ]
 
+auf_fun_tests :: TestTree
+auf_fun_tests =
+  testGroup "A.10" [
+    testCase "A10 01" $ auf_fun ([] :: [Int -> Int]) <*> pure 0 @?= ([]::[Int]),
+    testCase "A10 02" $ auf_fun ((+) <$> ([0..3]::[Int])) <*> pure 0 @?= [0,1,2,3],
+    testCase "A10 01" $ auf_fun ((\x y -> x*x+y-5) <$> ([-2..3]::[Int])) <*> pure 0 @?= [-5,-4,-4,-1,-1,4]
+  ]
+
+
 
 database_test :: TestTree
 database_test =

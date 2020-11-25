@@ -282,7 +282,12 @@ auf_fun_tests =
     [ testCase "A10 01" $ auf_fun ([] :: [Int -> Int]) <*> pure 0 @?= ([] :: [Int]),
       testCase "A10 02" $ auf_fun ((+) <$> ([0 .. 3] :: [Int])) <*> pure 0 @?= [0, 1, 2, 3],
       testCase "A10 03" $ auf_fun ((\x y -> x * x + y -5) <$> ([-2 .. 3] :: [Int])) <*> pure 0 @?= [-5, -4, -4, -1, -1, 4],
-      testCase "A10 04" $ auf_fun [abs . ((-2) +), (`div` 1), const 1] <*> pure 0 @?= [0, 1, 2]
+      testCase "A10 04" $ auf_fun [abs . ((-2) +), (`div` 1), const 1] <*> pure 0 @?= [0, 1, 2],
+      testCase "01" $ map (\f -> f 0) (auf_fun []) @?= map (\f -> f 0) [],
+      testCase "02" $ map (\f -> f 0) (auf_fun [plus1]) @?= map (\f -> f 0) [plus1],
+      testCase "03" $ map (\f -> f 0) (auf_fun [plus3, plus2, plus1]) @?= map (\f -> f 0) [plus1, plus2, plus3],
+      testCase "04" $ map (\f -> f 0) (auf_fun [plus3, plus1, plus2]) @?= map (\f -> f 0) [plus1, plus2, plus3],
+      testCase "05" $ map (\f -> f 0) (auf_fun [plus1, plus2, plus3]) @?= map (\f -> f 0) [plus1, plus2, plus3]
     ]
 
 ab_fun_tests :: TestTree
@@ -290,9 +295,38 @@ ab_fun_tests =
   testGroup
     "A.10"
     [ testCase "A10 11" $ ab_fun ([] :: [Int -> Int]) <*> pure 0 @?= ([] :: [Int]),
-      testCase "A10 12" $ ab_fun ((+) <$> ([0 .. 3] :: [Int])) <*> pure 0 @?= [3,2,1,0],
-      testCase "A10 13" $ ab_fun ((\x y -> x * x + y -5) <$> ([-2 .. 3] :: [Int])) <*> pure 0 @?= [4,-1,-1,-4,-4,-5],
-      testCase "A10 14" $ ab_fun [abs . ((-2) +), (`div` 1), const 1] <*> pure 0 @?= [2, 1, 0]
+      testCase "A10 12" $ ab_fun ((+) <$> ([0 .. 3] :: [Int])) <*> pure 0 @?= [3, 2, 1, 0],
+      testCase "A10 13" $ ab_fun ((\x y -> x * x + y -5) <$> ([-2 .. 3] :: [Int])) <*> pure 0 @?= [4, -1, -1, -4, -4, -5],
+      testCase "A10 14" $ ab_fun [abs . ((-2) +), (`div` 1), const 1] <*> pure 0 @?= [2, 1, 0],
+      testCase "01" $ map (\f -> f 0) (ab_fun []) @?= map (\f -> f 0) [],
+      testCase "02" $ map (\f -> f 0) (ab_fun [plus1]) @?= map (\f -> f 0) [plus1],
+      testCase "03" $ map (\f -> f 0) (ab_fun [plus3, plus2, plus1]) @?= map (\f -> f 0) [plus3, plus2, plus1],
+      testCase "04" $ map (\f -> f 0) (ab_fun [plus3, plus1, plus2]) @?= map (\f -> f 0) [plus3, plus2, plus1],
+      testCase "05" $ map (\f -> f 0) (ab_fun [plus1, plus2, plus3]) @?= map (\f -> f 0) [plus3, plus2, plus1]
+    ]
+
+auf_onfun_tests :: TestTree
+auf_onfun_tests =
+  testGroup
+    "A.11 auf_onfun"
+    [ testCase "01" $ map (\f -> f 0) (auf_onfun []) @?= map (\f -> f 0) [],
+      testCase "02" $ map (\f -> f 0) (auf_onfun [plus1]) @?= map (\f -> f 0) [plus1],
+      testCase "03" $ map (\f -> f 0) (auf_onfun [plus3, plus2, plus1]) @?= map (\f -> f 0) [plus1, plus2, plus3],
+      testCase "04" $ map (\f -> f 0) (auf_onfun [plus3, plus1, plus2]) @?= map (\f -> f 0) [plus1, plus2, plus3],
+      testCase "05" $ map (\f -> f 0) (auf_onfun [plus1, plus2, plus3]) @?= map (\f -> f 0) [plus1, plus2, plus3],
+      testCase "06" $ map (\f -> f 0) (auf_onfun [const 1, log, abs, exp]) @?= map (\f -> f 0) [log, abs, exp, const 1]
+    ]
+
+ab_onfun_tests :: TestTree
+ab_onfun_tests =
+  testGroup
+    "A.11 ab_onfun"
+    [ testCase "01" $ map (\f -> f 0) (ab_onfun []) @?= map (\f -> f 0) [],
+      testCase "02" $ map (\f -> f 0) (ab_onfun [plus1]) @?= map (\f -> f 0) [plus1],
+      testCase "03" $ map (\f -> f 0) (ab_onfun [plus3, plus2, plus1]) @?= map (\f -> f 0) [plus3, plus2, plus1],
+      testCase "04" $ map (\f -> f 0) (ab_onfun [plus3, plus1, plus2]) @?= map (\f -> f 0) [plus3, plus2, plus1],
+      testCase "05" $ map (\f -> f 0) (ab_onfun [plus1, plus2, plus3]) @?= map (\f -> f 0) [plus3, plus2, plus1],
+      testCase "06" $ map (\f -> f 0) (ab_onfun [log, abs, exp, const 1]) @?= map (\f -> f 0) [const 1, exp, abs, log]
     ]
 
 database_test :: TestTree
@@ -317,27 +351,7 @@ database_test =
       testCase "A13 06" $ map (head . getName) (auch_im_chaos_ist_ordnung_sicht datenbank1) @?= "CDEEGIJKN"
     ]
 
-{-
-p1 :: Int -> Int
-p1 num = num + 1
-
-p2 :: Int -> Int
-p2 num = num + 2
-
-p3 :: Int -> Int
-p3 num = num + 3
-
-auf_fun_tests :: TestTree
-auf_fun_tests =
-  testGroup
-    "A.10 auf_fun"
-    []
--}
-
---testCase "A10 01" $  auf_fun [p1] @?= [p1]
---testCase "A10 02" $  auf_fun [p3,p2,p1] @?= [p1,p2,p3],
---testCase "A10 03" $  auf_fun [p3,p1,p2] @?= [p1,p2,p3],
---testCase "A10 04" $  auf_fun [p1,p2,p3] @?= [p1,p2,p3]
+-- helper functions
 
 expectError :: Show a => a -> String -> Assertion
 expectError val expectedMsg = do
@@ -349,3 +363,12 @@ expectError val expectedMsg = do
           "expected: " ++ expectedMsg ++ "\n but got: " ++ actual
     Right r -> do
       assertFailure $ "Expected an exception but got: " ++ P.show r
+
+plus1 :: Int -> Int
+plus1 num = num + 1
+
+plus2 :: Int -> Int
+plus2 num = num + 2
+
+plus3 :: Int -> Int
+plus3 num = num + 3

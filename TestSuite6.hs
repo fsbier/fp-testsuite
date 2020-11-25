@@ -11,6 +11,10 @@ import Prelude as P
 main :: IO ()
 main = defaultMainWithIngredients [consoleTestReporter] spec
 
+unsortedList :: [Integer]
+unsortedList = [31, 29, 82, 14, 77, 19, 2, 41, 96, 40, 43, 93, 60, 62, 85, 86, 11, 40, 60, 98, 87, 21, 4, 25, 80, 35, 67, 23, 48, 62, 85, 69, 89, 26, 16, 67, 48, 88, 82, 34, 79, 54, 59, 67, 44, 65, 26, 36, 60, 44, 68, 65, 65, 85, 37, 1, 86, 49, 13, 85, 61, 56, 96, 40, 64, 48, 13, 21, 53, 76, 83, 35, 82, 90, 65, 15, 47, 57, 58, 42, 81, 59, 33, 52, 74, 30, 69, 30, 38, 48, 50, 77, 97, 22, 53, 2, 88, 79, 86, 67]
+
+datenbank1 :: Datenbank
 datenbank1 = [
   P 1 "Elsie" 58 F 5784 (Just Motorola),
   P 2 "Jay" 26 M 224 (Just Samsung),
@@ -58,7 +62,8 @@ gen_sort_tests =
       testCase "A1 09" $ gen_sort (>=) [3, 5, 3, 4, 2, 4] @?= [5, 4, 4, 3, 3, 2],
       testCase "A1 10" $ gen_sort (>) ([] :: [Int]) @?= [],
       testCase "A1 11" $ gen_sort (>) [3, 5, 2, 4] @?= [5, 4, 3, 2],
-      testCase "A1 12" $ gen_sort (>=) [3, 5, 3, 4, 2, 4] @?= [5, 4, 4, 3, 3, 2]
+      testCase "A1 12" $ gen_sort (>=) [3, 5, 3, 4, 2, 4] @?= [5, 4, 4, 3, 3, 2],
+      testCase "A1 12" $ gen_sort (>=) unsortedList @?= [98, 97, 96, 96, 93, 90, 89, 88, 88, 87, 86, 86, 86, 85, 85, 85, 85, 83, 82, 82, 82, 81, 80, 79, 79, 77, 77, 76, 74, 69, 69, 68, 67, 67, 67, 67, 65, 65, 65, 65, 64, 62, 62, 61, 60, 60, 60, 59, 59, 58, 57, 56, 54, 53, 53, 52, 50, 49, 48, 48, 48, 48, 47, 44, 44, 43, 42, 41, 40, 40, 40, 38, 37, 36, 35, 35, 34, 33, 31, 30, 30, 29, 26, 26, 25, 23, 22, 21, 21, 19, 16, 15, 14, 13, 13, 11, 4, 2, 2, 1]
     ]
 
 gen_insert_tests :: TestTree
@@ -273,13 +278,23 @@ database_test :: TestTree
 database_test =
   testGroup
     "A.13 Datenbank Personen"
-    [ 
-      testCase "A13 01" $ normalsicht datenbank1 @?= [P 4 "Cora" 22 F 742 (Just Samsung),P 8 "Demi" 55 M 2790 (Just Huawai),P 1 "Elsie" 58 F 5784 (Just Motorola),P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 3 "Niamh" 37 D 635 (Just Huawai)],
-      testCase "A13 02" $ anlageberatungssicht datenbank1 @?= [P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 1 "Elsie" 58 F 5784 (Just Motorola),P 5 "Kimberley" 7 M 3587 Nothing,P 8 "Demi" 55 M 2790 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 3 "Niamh" 37 D 635 (Just Huawai),P 2 "Jay" 26 M 224 (Just Samsung)],
-      testCase "A13 03" $ personalabteilungssicht datenbank1 @?= [P 3 "Niamh" 37 D 635 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 1 "Elsie" 58 F 5784 (Just Motorola),P 5 "Kimberley" 7 M 3587 Nothing,P 2 "Jay" 26 M 224 (Just Samsung),P 9 "Iqra" 54 M 6510 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 7 "Gemma" 78 M 6578 (Just Apple),P 6 "Esther" 98 M 7052 (Just LG)],
-      testCase "A13 04" $ sozialforschungssicht datenbank1 @?= [P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 3 "Niamh" 37 D 635 (Just Huawai),P 6 "Esther" 98 M 7052 (Just LG),P 1 "Elsie" 58 F 5784 (Just Motorola),P 4 "Cora" 22 F 742 (Just Samsung),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing],
-      testCase "A13 05" $ integritaetssicht datenbank1 @?= [P 1 "Elsie" 58 F 5784 (Just Motorola),P 2 "Jay" 26 M 224 (Just Samsung),P 3 "Niamh" 37 D 635 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 9 "Iqra" 54 M 6510 (Just Apple)],
-      testCase "A13 06" $ auch_im_chaos_ist_ordnung_sicht datenbank1 @?= [P 4 "Cora" 22 F 742 (Just Samsung),P 8 "Demi" 55 M 2790 (Just Huawai),P 1 "Elsie" 58 F 5784 (Just Motorola),P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 3 "Niamh" 37 D 635 (Just Huawai)]
+    [
+      testCase "A13 01" $ normalsicht datenbank1 @?=
+        [P 4 "Cora" 22 F 742 (Just Samsung),P 8 "Demi" 55 M 2790 (Just Huawai),P 1 "Elsie" 58 F 5784 (Just Motorola),P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 3 "Niamh" 37 D 635 (Just Huawai)],
+
+      testCase "A13 02" $ anlageberatungssicht datenbank1 @?=
+        [P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 1 "Elsie" 58 F 5784 (Just Motorola),P 5 "Kimberley" 7 M 3587 Nothing,P 8 "Demi" 55 M 2790 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 3 "Niamh" 37 D 635 (Just Huawai),P 2 "Jay" 26 M 224 (Just Samsung)],
+
+      testCase "A13 03" $ personalabteilungssicht datenbank1 @?=
+        [P 3 "Niamh" 37 D 635 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 1 "Elsie" 58 F 5784 (Just Motorola),P 5 "Kimberley" 7 M 3587 Nothing,P 2 "Jay" 26 M 224 (Just Samsung),P 9 "Iqra" 54 M 6510 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 7 "Gemma" 78 M 6578 (Just Apple),P 6 "Esther" 98 M 7052 (Just LG)],
+
+      testCase "A13 04" $ sozialforschungssicht datenbank1 @?=
+        [P 7 "Gemma" 78 M 6578 (Just Apple),P 9 "Iqra" 54 M 6510 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 3 "Niamh" 37 D 635 (Just Huawai),P 6 "Esther" 98 M 7052 (Just LG),P 1 "Elsie" 58 F 5784 (Just Motorola),P 4 "Cora" 22 F 742 (Just Samsung),P 2 "Jay" 26 M 224 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing],
+
+      testCase "A13 05" $ integritaetssicht datenbank1 @?=
+        [P 1 "Elsie" 58 F 5784 (Just Motorola),P 2 "Jay" 26 M 224 (Just Samsung),P 3 "Niamh" 37 D 635 (Just Huawai),P 4 "Cora" 22 F 742 (Just Samsung),P 5 "Kimberley" 7 M 3587 Nothing,P 6 "Esther" 98 M 7052 (Just LG),P 7 "Gemma" 78 M 6578 (Just Apple),P 8 "Demi" 55 M 2790 (Just Huawai),P 9 "Iqra" 54 M 6510 (Just Apple)],
+
+      testCase "A13 06" $ map (head.getName) (auch_im_chaos_ist_ordnung_sicht datenbank1) @?= "CDEEGIJKN"
     ]
 
 {-

@@ -66,6 +66,8 @@ spec =
       testCase "as 3" $  ausscheiden gw [2,3,1] @?= [[1,2,4],[2,1],[4,1],[],[5,1],[1,2],[2,1],[2,2,1]],
       testCase "as 4" $  ausscheiden [[1,2,4],[2,1],[4,1],[],[3,1],[1,2],[2,1],[2,2,1]] [2,3,2] @?= [[2,4],[2],[4],[],[],[2],[2],[2,2]], -- Aus der Angabe lese ich heraus, dass "KANDIDATEN" (Plural) mit den wenigsten Stimmen entfernt werden sollen, also in dem Fall Kandidat 1 und 3
       testCase "as 5" $  ausscheiden [[2],[1]] [1,1] @?= [[],[]],
+      testCase "as 6" $  ausscheiden gw [2,2,1,1,0] @?= [[1,2],[2,1],[1],[],[1],[1,2],[2,1],[2,2,1]],
+
       -- A7
       testCase "wa 1"  $  wahlausgang gwv wahl1 @?= Gewaehlt_ist (gwv!!1),
       testCase "wa 2"  $  wahlausgang gwv wahl3 @?= Gewaehlt_ist (gwv!!1),

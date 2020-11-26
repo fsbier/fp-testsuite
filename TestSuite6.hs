@@ -27,6 +27,26 @@ datenbank1 =
     P 9 "Iqra" 54 M 6510 (Just Apple)
   ]
 
+datenbank2 :: Datenbank
+datenbank2 =
+  [ P 1 "Elsie" 58 F 5784 (Just Motorola),
+    P 10 "Paulus II" 30 F 666 Nothing, 
+    P 5 "Kimberley" 7 M 3587 Nothing,
+    P 2 "Jay" 26 M 224 (Just Samsung),
+    P 10 "Paulus II" 30 F 666 Nothing, 
+    P 3 "Niamh" 37 D 635 (Just Huawai),
+    P 4 "Cora" 22 F 742 (Just Samsung),
+    P 5 "Kimberley" 7 M 3587 Nothing,
+    P 6 "Esther" 98 M 7052 (Just LG),
+    P 7 "Gemma" 78 M 6578 (Just Apple),
+    P 1 "Elsie" 58 F 5784 (Just Motorola),
+    P 8 "Demi" 55 M 2790 (Just Huawai),
+    P 10 "Paulus II" 30 F 666 Nothing, 
+    P 9 "Iqra" 54 M 6510 (Just Apple), 
+    P 5 "Kimberley" 7 M 3587 Nothing,
+    P 10 "Paulus II" 30 F 666 Nothing
+  ]
+  
 spec :: TestTree
 spec =
   testGroup
@@ -345,9 +365,12 @@ database_test =
       testCase "A13 04" $
         sozialforschungssicht datenbank1
           @?= [P 7 "Gemma" 78 M 6578 (Just Apple), P 9 "Iqra" 54 M 6510 (Just Apple), P 8 "Demi" 55 M 2790 (Just Huawai), P 3 "Niamh" 37 D 635 (Just Huawai), P 6 "Esther" 98 M 7052 (Just LG), P 1 "Elsie" 58 F 5784 (Just Motorola), P 4 "Cora" 22 F 742 (Just Samsung), P 2 "Jay" 26 M 224 (Just Samsung), P 5 "Kimberley" 7 M 3587 Nothing],
-      testCase "A13 05" $
+      testCase "A13 05 01" $
         integritaetssicht datenbank1
           @?= [P 1 "Elsie" 58 F 5784 (Just Motorola), P 2 "Jay" 26 M 224 (Just Samsung), P 3 "Niamh" 37 D 635 (Just Huawai), P 4 "Cora" 22 F 742 (Just Samsung), P 5 "Kimberley" 7 M 3587 Nothing, P 6 "Esther" 98 M 7052 (Just LG), P 7 "Gemma" 78 M 6578 (Just Apple), P 8 "Demi" 55 M 2790 (Just Huawai), P 9 "Iqra" 54 M 6510 (Just Apple)],
+      testCase "A13 05 02" $
+        integritaetssicht datenbank2
+          @?= [ P 10 "Paulus II" 30 F 666 Nothing, P 10 "Paulus II" 30 F 666 Nothing, P 10 "Paulus II" 30 F 666 Nothing, P 10 "Paulus II" 30 F 666 Nothing, P 5 "Kimberley" 7 M 3587 Nothing, P 5 "Kimberley" 7 M 3587 Nothing, P 5 "Kimberley" 7 M 3587 Nothing, P 1 "Elsie" 58 F 5784 (Just Motorola), P 1 "Elsie" 58 F 5784 (Just Motorola), P 2 "Jay" 26 M 224 (Just Samsung), P 3 "Niamh" 37 D 635 (Just Huawai), P 4 "Cora" 22 F 742 (Just Samsung), P 6 "Esther" 98 M 7052 (Just LG), P 7 "Gemma" 78 M 6578 (Just Apple), P 8 "Demi" 55 M 2790 (Just Huawai), P 9 "Iqra" 54 M 6510 (Just Apple)],
       testCase "A13 06" $ map (head . getName) (auch_im_chaos_ist_ordnung_sicht datenbank1) @?= "CDEEGIJKN"
     ]
 

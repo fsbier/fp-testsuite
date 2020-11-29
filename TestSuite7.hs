@@ -1,7 +1,7 @@
 module TestSuite7 where
 
 import Angabe7
-  (Band, Zeichenvorrat,  Bandalphabet (Blank, Z),
+  (wandle_in_rb, Band, Zeichenvorrat,  Bandalphabet (Blank, Z),
     MinMax (B, U),
     Rechenband (..),
     akt_band,
@@ -43,8 +43,10 @@ spec :: TestTree
 spec =
   testGroup
     "Angabe7 Tests"
-    [ akt_band_tests,
-      akt_rechenband_test
+    [
+      akt_band_tests,
+      akt_rechenband_test,
+      wandle_in_rb_test
     ]
 
 akt_band_tests :: TestTree
@@ -72,15 +74,23 @@ akt_rechenband_test =
       testCase "6" $ bi (akt_rechenband (stringToRB "A") 0 Blank) @?= "Leer",
       testCase "7" $ bi (akt_rechenband (stringToRB "A") 1 Blank) @?= "0>A<0",
       testCase "8" $ bi (akt_rechenband (stringToRB "ABC") 0 Blank) @?= "1>BC<2",
-      testCase "9" $ bi (akt_rechenband (stringToRB "ABC") 1 Blank) @?= "0>AC<2",
       testCase "10" $ bi (akt_rechenband (stringToRB "ABC") 2 Blank) @?= "0>AB<1",
-      testCase "11" $ bi (akt_rechenband (stringToRB "ABC") (-2) (Z 'X')) @?= "-2>XABC<2",
       testCase "12" $ bi (akt_rechenband (stringToRB "ABC") (-1) (Z 'X')) @?= "-1>XABC<2",
       testCase "13" $ bi (akt_rechenband (stringToRB "ABC") 0 (Z 'X')) @?= "0>XBC<2",
       testCase "14" $ bi (akt_rechenband (stringToRB "ABC") 1 (Z 'X')) @?= "0>AXC<2",
       testCase "15" $ bi (akt_rechenband (stringToRB "ABC") 2 (Z 'X')) @?= "0>ABX<2",
       testCase "16" $ bi (akt_rechenband (stringToRB "ABC") 3 (Z 'X')) @?= "0>ABCX<3",
-      testCase "17" $ bi (akt_rechenband (stringToRB "ABC") 4 (Z 'X')) @?= "0>ABCX<4",
-      testCase "18" $ bi (akt_rechenband (akt_rechenband (stringToRB "ABC") 1 Blank) 2 Blank) @?= "0>A<0",
-      testCase "19" $ bi (akt_rechenband (akt_rechenband (stringToRB "ABC") 1 Blank) 0 Blank) @?= "2>C<2"
+      testCase "18" $ bi (akt_rechenband (akt_rechenband (stringToRB "ABC") 2 Blank) 1 Blank) @?= "0>A<0",
+      testCase "19" $ bi (akt_rechenband (akt_rechenband (stringToRB "ABC") 0 Blank) 1 Blank) @?= "2>C<2"
+    ]
+
+wandle_in_rb_test :: TestTree
+wandle_in_rb_test =
+  testGroup
+    "wandle_in_rb"
+    [
+      testCase "1" $ bi (wandle_in_rb "") @?= "Leer",
+      testCase "2" $ bi (wandle_in_rb "A") @?= "0>A<0",
+      testCase "3" $ bi (wandle_in_rb "ABC") @?= "0>ABC<2",
+      testCase "4" $ bi (wandle_in_rb "Test Wort") @?= "0>Test Wort<8"
     ]

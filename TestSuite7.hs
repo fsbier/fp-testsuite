@@ -1,12 +1,6 @@
 module TestSuite7 where
 
 import Angabe7
-  (wandle_in_rb, Band, Zeichenvorrat,  Bandalphabet (Blank, Z),
-    MinMax (B, U),
-    Rechenband (..),
-    akt_band,
-    akt_rechenband,
-  )
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (testCase, (@?=))
 
@@ -39,6 +33,27 @@ stringToRB cs
       | otherwise = Blank
     csl = fromIntegral $ length cs
 
+tt :: Turingtafel
+tt = [
+    (0,Blank,Bewege_LSK_nach Rechts,1),
+
+    (1,(Z '('),Bewege_LSK_nach Rechts,1),
+    (1,(Z '['),Bewege_LSK_nach Rechts,1),
+    (1,(Z 'x'),Bewege_LSK_nach Rechts,1),
+    (1,(Z ')'),(Drucke (Z 'x')), 2),
+    (1,(Z ']'),(Drucke (Z 'x')), 3),
+    (1,Blank,Bewege_LSK_nach Links,4),
+
+    (2,(Z 'x'),Bewege_LSK_nach Links,2),
+    (2,(Z '('),(Drucke (Z 'x')),1),
+
+    (3,(Z 'x'),Bewege_LSK_nach Links,3),
+    (3,(Z '['),(Drucke (Z 'x')),1),
+
+    (4,(Z 'x'),Bewege_LSK_nach Links,4),
+    (4,Blank,Bewege_LSK_nach Links,5)
+  ]
+
 spec :: TestTree
 spec =
   testGroup
@@ -46,7 +61,8 @@ spec =
     [
       akt_band_tests,
       akt_rechenband_test,
-      wandle_in_rb_test
+      wandle_in_rb_test,
+      sim_test 
     ]
 
 akt_band_tests :: TestTree
@@ -90,7 +106,16 @@ wandle_in_rb_test =
     "wandle_in_rb"
     [
       testCase "1" $ bi (wandle_in_rb "") @?= "Leer",
-      testCase "2" $ bi (wandle_in_rb "A") @?= "0>A<0",
-      testCase "3" $ bi (wandle_in_rb "ABC") @?= "0>ABC<2",
-      testCase "4" $ bi (wandle_in_rb "Test Wort") @?= "0>Test Wort<8"
+      testCase "2" $ bi (wandle_in_rb "A") @?= "1>A<1",
+      testCase "3" $ bi (wandle_in_rb "ABC") @?= "1>ABC<3",
+      testCase "4" $ bi (wandle_in_rb "Test Wort") @?= "1>Test Wort<9"
+    ]
+
+sim_test :: TestTree
+sim_test =
+  testGroup
+    "sim"
+    [ 
+      testCase "1" $ show (sim (SE tt (wandle_in_rb "()"))) @?= "IZ: 5 // LSKP: -1 // BI: 1>xx<2",
+      testCase "2" $ show (sim (SE tt (wandle_in_rb "()[]([([]())])"))) @?= "IZ: 5 // LSKP: -1 // BI: 1>xxxxxxxxxxxxxx<14"
     ]
